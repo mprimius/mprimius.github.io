@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -91,6 +89,8 @@
             font-size: 1.1rem;
             transition: background 0.2s;
             margin-top: 15px;
+            cursor: pointer;
+            border: none;
         }
 
         .btn:hover {
@@ -173,9 +173,12 @@
         </ul>
 
 <script>
-  // Inizializza Paddle con il tuo Client Token
+  // Inizializza Paddle con il tuo Client Token e imposta la lingua italiana
   Paddle.Initialize({ 
-    token: "live_4ce84a4b2ebc84ba47fae608711" 
+    token: "live_4ce84a4b2ebc84ba47fae608711",
+    settings: {
+      locale: "it"
+    }
   });
 
   function apriCheckout() {
@@ -222,8 +225,8 @@
     <!-- FOOTER WITH CONTACT & BUSINESS INFO -->
     <footer>
         <p><strong>RE-Radar Software</strong></p>
-        <p>Sviluppato da: [Matteo Primiano] (Individual Developer)</p>
-        <p>Sede / Indirizzo: Via Achille Funi 10 , Roma (RM)</p>
+        <p>Sviluppato da: Matteo Primiano (Individual Developer)</p>
+        <p>Sede / Indirizzo: Via Achille Funi 10, Roma (RM)</p>
         <p>Email di supporto: <a href="mailto:IlGruppoDeiPariRoma@gmail.com">IlGruppoDeiPariRoma@gmail.com</a></p>
         <br>
         <p>© 2026 RE-Radar. Tutti i diritti riservati. Powered by Paddle.com</p>
