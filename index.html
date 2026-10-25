@@ -14,6 +14,7 @@
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
+            --accent: #3b82f6;
         }
 
         * {
@@ -31,7 +32,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1050px;
             margin: 0 auto;
         }
 
@@ -61,34 +62,76 @@
             margin-bottom: 30px;
         }
 
-        .pricing-box {
+        /* GRIGLIA PRICING CON 3 PIANI */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pricing-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px 20px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .pricing-card.featured {
             border: 2px solid var(--primary);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .price {
-            font-size: 3rem;
+            font-size: 2.3rem;
             font-weight: bold;
-            margin: 15px 0;
+            margin: 15px 0 5px;
             color: #ffffff;
         }
 
         .price span {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
         }
 
         .btn {
             display: inline-block;
+            width: 100%;
             background: var(--primary);
             color: white;
-            padding: 14px 28px;
+            padding: 12px 20px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: background 0.2s;
-            margin-top: 15px;
+            margin-top: 20px;
             cursor: pointer;
             border: none;
         }
@@ -97,16 +140,32 @@
             background: var(--primary-dark);
         }
 
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
         .features-list {
             list-style: none;
-            margin: 20px 0;
+            margin: 20px 0 0;
             text-align: left;
+            font-size: 0.9rem;
         }
 
         .features-list li {
             padding: 8px 0;
             border-bottom: 1px solid var(--border);
             color: var(--text-muted);
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
         }
 
         .features-list li::before {
@@ -156,52 +215,73 @@
         <p class="hero-subtitle">Software Desktop di analisi, mappatura avanzata del mercato immobiliare per professionisti e investitori.</p>
     </header>
 
-    <!-- PRICING & PURCHASE SECTION -->
-    <div class="card pricing-box">
-        <h2>Licenza Commerciale Annuale</h2>
-        <p style="color: var(--text-muted);">Accesso completo a tutte le funzionalità di RE-Radar per Windows e macOS.</p>
-        
-        <div class="price">€250,00 + iva <span>/ anno</span></div>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">Tasse escluse Rinnovo annuale gestito in modo sicuro.</p>
+    <!-- PRICING & PURCHASE SECTION (3 PIANI) -->
+    <div class="pricing-grid">
 
-        <ul class="features-list">
-            <li>Licenza Node-Locked (1 PC attivato per licenza)</li>
-            <li>Integrazione supporto SQLite locale</li>
-            <li>Ricerca automatizzata e mappatura annunci</li>
-            <li>Aggiornamenti software gratuiti inclusi per 12 mesi</li>
-            <li>Supporto tecnico prioritario via Whatsapp</li>
-        </ul>
+        <!-- PIANO SETTIMANALE -->
+        <div class="pricing-card">
+            <div>
+                <h2>Pass Settimanale</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Ideale per testare il software o per analisi operative brevi.</p>
+                <div class="price">€19,00 <span>/ sett.</span></div>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Tasse escluse. Rinnovo settimanale.</p>
 
-<script>
-  // Inizializza Paddle con il tuo Client Token e imposta la lingua italiana
-  Paddle.Initialize({ 
-    token: "live_4ce84a4b2ebc84ba47fae608711",
-    settings: {
-      locale: "it"
-    }
-  });
+                <ul class="features-list">
+                    <li>Licenza Node-Locked (1 PC)</li>
+                    <li>Accesso completo a tutte le funzioni</li>
+                    <li>Mappatura e scraping automatico</li>
+                    <li>Supporto tecnico via Email</li>
+                </ul>
+            </div>
+            <button onclick="apriCheckout('pri_01m5rtm4p6xyqc9yskbjhb9yec')" class="btn btn-outline">Attiva Settimanale</button>
+        </div>
 
-  function apriCheckout() {
-    Paddle.Checkout.open({
-      items: [
-        {
-          priceId: 'pri_01m44bnfg1x2py2kehaw64pw83',
-          quantity: 1
-        }
-      ]
-    });
-  }
-</script>
+        <!-- PIANO MENSILE -->
+        <div class="pricing-card">
+            <div>
+                <h2>Licenza Mensile</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Flessibilità massima per operazioni ed esigenze ricorrenti.</p>
+                <div class="price">€49,00 <span>/ mese</span></div>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Tasse escluse. Rinnovo mensile.</p>
 
-<!-- Il pulsante collegherà la funzione JavaScript -->
-<button onclick="apriCheckout()" class="btn">Acquista Licenza Ora</button>
+                <ul class="features-list">
+                    <li>Licenza Node-Locked (1 PC)</li>
+                    <li>Integrazione SQLite locale</li>
+                    <li>Mappatura e scraping automatico</li>
+                    <li>Aggiornamenti software inclusi</li>
+                    <li>Supporto tecnico via Email</li>
+                </ul>
+            </div>
+            <button onclick="apriCheckout('pri_01m5rtgs8qy1dpe4csavpd4xn4')" class="btn btn-outline">Attiva Mensile</button>
+        </div>
+
+        <!-- PIANO ANNUALE (FEATURED) -->
+        <div class="pricing-card featured">
+            <div class="badge-popular">Più Conveniente</div>
+            <div>
+                <h2>Licenza Annuale</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">La soluzione completa ed economica per professionisti.</p>
+                <div class="price">€250,00 <span>/ anno</span></div>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Tasse escluse. Rinnovo annuale.</p>
+
+                <ul class="features-list">
+                    <li>Licenza Node-Locked (1 PC)</li>
+                    <li>Integrazione supporto SQLite locale</li>
+                    <li>Ricerca automatizzata e mappatura annunci</li>
+                    <li>Aggiornamenti gratuiti per 12 mesi</li>
+                    <li><strong>Supporto prioritario WhatsApp</strong></li>
+                </ul>
+            </div>
+            <button onclick="apriCheckout('pri_01m44bnfg1x2py2kehaw64pw83')" class="btn">Acquista Annuale</button>
+        </div>
+
     </div>
 
-    <!-- PRODUCT DETAILS (Chekcklist Compliance Paddle) -->
+    <!-- PRODUCT DETAILS (Checklist Compliance Paddle) -->
     <div class="card">
         <h2>Requisiti di Sistema e Consegna</h2>
         <p><strong>Piattaforma supportata:</strong> Windows 10 / Windows 11 (64-bit).</p>
-        <p><strong>Piattaforma supportata:</strong> macOS [Richiede Parallel Desktop]</p>
+        <p><strong>Piattaforma supportata:</strong> macOS [Richiede Parallels Desktop]</p>
         <p><strong>Modalità di consegna:</strong> Digital Delivery immediata. Dopo il completamento del pagamento su Paddle, riceverai un'e-mail contenente la tua chiave di licenza univoca e il link diretto per scaricare l'installer del software.</p>
     </div>
 
@@ -233,6 +313,28 @@
     </footer>
 
 </div>
+
+<script>
+  // Inizializza Paddle con il tuo Client Token e imposta la lingua italiana
+  Paddle.Initialize({ 
+    token: "live_4ce84a4b2ebc84ba47fae608711",
+    settings: {
+      locale: "it"
+    }
+  });
+
+  // Funzione unica per aprire il checkout passando il priceId specifico
+  function apriCheckout(selectedPriceId) {
+    Paddle.Checkout.open({
+      items: [
+        {
+          priceId: selectedPriceId,
+          quantity: 1
+        }
+      ]
+    });
+  }
+</script>
 
 </body>
 </html>
