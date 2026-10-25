@@ -14,7 +14,7 @@
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
-            --accent: #10b981; /* Verde accattivante per il Trial */
+            --accent: #10b981;
         }
 
         * {
@@ -38,7 +38,7 @@
 
         header {
             text-align: center;
-            padding: 50px 20px 30px;
+            padding: 60px 20px 40px;
         }
 
         h1 {
@@ -334,7 +334,7 @@
         <h2>Requisiti di Sistema e Consegna</h2>
         <p><strong>Piattaforma supportata:</strong> Windows 10 / Windows 11 (64-bit).</p>
         <p><strong>Piattaforma supportata:</strong> macOS [Richiede Parallels Desktop]</p>
-        <p><strong>Modalità di consegna:</strong> Digital Delivery immediata. Dopo il completamento dell'ordine su Paddle, riceverai un'e-mail contenente la tua chiave di licenza univoca e il link diretto per scaricare l'installer del software.</p>
+        <p><strong>Modalità di consegna:</strong> Digital Delivery immediata. Dopo il completamento del pagamento su Paddle, riceverai un'e-mail contenente la tua chiave di licenza univoca e il link diretto per scaricare l'installer del software.</p>
     </div>
 
     <!-- LEGAL & TERMS OF SERVICE -->
@@ -345,4 +345,104 @@
         <p>I nostri ordini e pagamenti sono gestiti da <strong>Paddle.com</strong> (Merchant of Record). Paddle gestisce la conformità fiscale, le ricevute e l'incasso in totale sicurezza.</p>
 
         <h3>2. Politica di Rimborso e Diritto di Recesso</h3>
-        <p>Offriamo una garanzia di rimborso al 100% entro <strong>14 giorni dall'acquisto</strong>. Se il software non soddisfa le tue aspettative o riscontri problemi tecnici non risolvibili, contatta il nostro
+        <p>Offriamo una garanzia di rimborso al 100% entro <strong>14 giorni dall'acquisto</strong>. Se il software non soddisfa le tue aspettative o riscontri problemi tecnici non risolvibili, contatta il nostro supporto per ottenere un rimborso completo.</p>
+
+        <h3>3. Attivazione e Licenza</h3>
+        <p>Ogni licenza commerciale acquistata consente l'attivazione del software su un singolo computer (Node-Locked). Per trasferire la licenza su un altro dispositivo è necessario contattare l'assistenza tecnica.</p>
+
+        <h3>4. Privacy & Trattamento Dati</h3>
+        <p>Non salviamo né trattiamo i dati della tua carta di credito. I dati personali forniti in fase di checkout vengono utilizzati esclusivamente per la generazione della licenza di utilizzo e per l'invio delle fatture/ricevute da parte di Paddle.</p>
+    </div>
+
+    <!-- FOOTER WITH CONTACT & BUSINESS INFO -->
+    <footer>
+        <p><strong>RE-Radar Software</strong></p>
+        <p>Sviluppato da: Matteo Primiano (Individual Developer)</p>
+        <p>Sede / Indirizzo: Via Achille Funi 10, Roma (RM)</p>
+        <p>Email di supporto: <a href="mailto:IlGruppoDeiPariRoma@gmail.com">IlGruppoDeiPariRoma@gmail.com</a></p>
+        <br>
+        <p>© 2026 RE-Radar. Tutti i diritti riservati. Powered by Paddle.com</p>
+    </footer>
+
+</div>
+
+<script>
+  // Inizializza Paddle con il tuo Client Token e imposta la lingua italiana
+  Paddle.Initialize({ 
+    token: "live_4ce84a4b2ebc84ba47fae608711",
+    settings: {
+      locale: "it"
+    }
+  });
+
+  // Estrae l'HWID se passato tramite QueryString oppure da WebView2 C# Host Object
+  function getHardwareId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('hwid')) {
+        return urlParams.get('hwid');
+    }
+    if (window.chrome && window.chrome.webview && window.chrome.webview.hostObjects && window.chrome.webview.hostObjects.reRadarHost) {
+        return window.chrome.webview.hostObjects.reRadarHost.GetHWID();
+    }
+    return null;
+  }
+
+  // Funzione per i piani a pagamento (Settimanale, Mensile, Annuale)
+  function apriCheckout(selectedPriceId) {
+    const hwid = getHardwareId();
+    
+    Paddle.Checkout.open({
+      items: [
+        {
+          priceId: selectedPriceId,
+          quantity: 1
+        }
+      ],
+      customData: hwid ? { hardwareId: hwid } : {}
+    });
+  }
+
+  // Funzione per la Prova Gratuita (Verifica HWID preventivo su Vercel)
+  async function richiediTrial(trialPriceId) {
+    const hwid = getHardwareId();
+
+    if (!hwid) {
+        alert("Attenzione: Impossibile rilevare l'Hardware ID di questo computer. Apri la pagina dall'interno dell'applicazione RE-Radar per richiedere la prova gratuita.");
+        return;
+    }
+
+    try {
+      const checkRes = await fetch('/api/check-hwid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hardwareId: hwid })
+      });
+
+      const checkData = await checkRes.json();
+
+      if (!checkRes.ok) {
+        alert(checkData.error || "Questo computer ha già usufruito della prova gratuita.");
+        return;
+      }
+
+      Paddle.Checkout.open({
+        items: [
+          {
+            priceId: trialPriceId,
+            quantity: 1
+          }
+        ],
+        customData: {
+          hardwareId: hwid
+        }
+      });
+
+    } catch (err) {
+      console.error("Errore durante la verifica dell'idoneità al trial:", err);
+      alert("Si è verificato un errore di rete. Riprova tra poco.");
+    }
+  }
+</script>
+
+</body>
+</html>
